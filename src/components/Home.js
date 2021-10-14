@@ -24,15 +24,18 @@ const Home = () => {
                     setQueueUrl(res.QueueUrl)
                     setCrawlerRunning(true)
                 }
-            })
+            }).catch(e=>console.log(e))
     }
 
     useEffect(() => {
         if(crawlerRunning){
-            setInterval(() => {
+            const intervalID= setInterval(() => {
+                console.log(crawlerRunning)
                 getCrawlingStatus(QueueUrl).then(res=>{
                     console.log('checking',res)
                     if(!!res?.tree){
+                        console.log(res.tree)
+                        clearInterval(intervalID)
                         setTree(res.tree)
                         setCrawlerRunning(false)
                         // setCurrentDepth(res.currentDepth||1)
@@ -51,12 +54,12 @@ const Home = () => {
                 <input disabled={!!crawlerRunning} type="text" placeholder="root url" value={rootUrl} onChange={(e)=>setRootUrl(e.target.value)}/>
                 <input className={parseInt(maxDepth)<1?'input-error':''} disabled={!!crawlerRunning} type="number" name="maxDepth" placeholder="max depth" value={maxDepth} onChange={(e)=>setMaxDepth(e.target.value)}/>
                 <input className={parseInt(maxTotalPages)<1?'input-error':''} disabled={!!crawlerRunning} type="number" name="maxTotalPages" placeholder="max total pages" value={maxTotalPages} onChange={(e)=>setMaxTotalPages(e.target.value)}/>
-                <button>Run Worker !</button>
+                <button disabled={crawlerRunning}>Run Worker !</button>
             </form>
             {
                 tree.length>0&&
                 <>
-                    <SummeryLine />
+                    <SummeryLine rootUrl={rootUrl} depth={tree[tree.length-1].depth} childrens={tree.length}/>
                     {
                         tree.map(node=>(
                             <DataBlock key={node} dataBlock={node}/>

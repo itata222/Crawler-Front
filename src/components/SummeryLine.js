@@ -1,20 +1,18 @@
 import React from 'react'
 
-const SummeryLine = ({rootUrl,currentDepth,currentChildrens}) => {
-    const rootTitle='google.com'
-    const children=10
-    const depth=2
+const SummeryLine = ({rootUrl,depth,childrens}) => {
+
     return (
         <div className="summeryLine">
             <div className="headers">
                 <span>Root Url</span>
-                <span>Current Childrens</span>
-                <span>Current Depth</span>
+                <span>Total Childrens</span>
+                <span>Depth</span>
             </div>
             <div className="values">
-                <span>{rootUrl||rootTitle}</span>
-                <span>{currentChildrens||children}</span>
-                <span>{currentDepth||depth}</span>
+                <span>{rootUrl}</span>
+                <span>{childrens}</span>
+                <span>{depth}</span>
             </div>
         </div>
     )
