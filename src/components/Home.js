@@ -36,6 +36,8 @@ const Home = () => {
                     if(!!res?.tree){
                         console.log(res.tree)
                         clearInterval(intervalID)
+                        for(let i=0;i< res.tree.length;i++)
+                           res.tree[i]=JSON.parse(res.tree[i])
                         setTree(res.tree)
                         setCrawlerRunning(false)
                         // setCurrentDepth(res.currentDepth||1)
@@ -61,8 +63,8 @@ const Home = () => {
                 <>
                     <SummeryLine rootUrl={rootUrl} depth={tree[tree.length-1].depth} childrens={tree.length}/>
                     {
-                        tree.map(node=>(
-                            <DataBlock key={node} dataBlock={node}/>
+                        tree.map((node,i)=>(
+                            <DataBlock key={node} dataBlock={node} i={i}/>
                         ))
                     }
                 </>

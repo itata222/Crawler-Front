@@ -1,7 +1,7 @@
 import React from 'react'
 
-const DataBlock = ({dataBlock}) => {
-
+const DataBlock = ({dataBlock,i}) => {
+    console.log(dataBlock)
     //data block should consist url and depth
 
     const dataBlockClicked=()=>{
@@ -9,8 +9,8 @@ const DataBlock = ({dataBlock}) => {
     }
 
     return (
-        <div className="dataBlock" onClick={dataBlockClicked}>
-           <span>{dataBlock}</span>
+        <div className="dataBlock" onClick={dataBlockClicked} style={{transform:`translatex(${i*5}px)`}}>
+           <span>{dataBlock.myAddress}</span>
         </div>
     )
 }
