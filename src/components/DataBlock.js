@@ -10,7 +10,8 @@ const DataBlock = ({ dataBlock, i, key }) => {
   return (
     <div className='dataBlock' onClick={dataBlockClicked} style={{ transform: `translatex(${i * 5}px)` }}>
       <span>{dataBlock.parentAddress}</span>
-      <span>{dataBlock.position}</span>
+      {/* <span>{dataBlock.position}</span> */}
+      <span className='seperator'></span>
       <span>{dataBlock.myAddress}</span>
     </div>
   );

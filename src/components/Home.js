@@ -9,6 +9,7 @@ const Home = () => {
   const [maxDepth, setMaxDepth] = useState("");
   const [maxTotalPages, setMaxTotalPages] = useState("");
   const [QueueUrl, setQueueUrl] = useState("");
+  const [workID, setWorkID] = useState(null);
 
   // const [currentDepth, setCurrentDepth] = useState('');
   // const [currentChildrens, setCurrentChildrens] = useState('');
@@ -22,6 +23,7 @@ const Home = () => {
           if (!!res.QueueUrl) {
             console.log("crwaler running!", res);
             setQueueUrl(res.QueueUrl);
+            setWorkID(res.workID);
             setCrawlerRunning(true);
           }
         })
@@ -32,7 +34,7 @@ const Home = () => {
     if (crawlerRunning) {
       const intervalID = setInterval(() => {
         console.log(crawlerRunning);
-        getCrawlingStatus(QueueUrl)
+        getCrawlingStatus(QueueUrl, workID)
           .then((res) => {
             console.log("checking", res);
             if (!!res?.tree) {
@@ -51,7 +53,7 @@ const Home = () => {
           .catch((e) => console.log(e));
       }, 5000);
     }
-  }, [crawlerRunning, QueueUrl, maxTotalPages]);
+  }, [crawlerRunning, QueueUrl, maxTotalPages, workID]);
 
   return (
     <div className='home'>
@@ -82,7 +84,7 @@ const Home = () => {
         <>
           <SummeryLine rootUrl={rootUrl} depth={tree[tree.length - 1].depth} childrens={tree.length} />
           {tree.map((node, i) => (
-            <div key={`${node.rootUrl}$${node.depth}$${node.position}`}>
+            <div key={`${node.workID}$${node.depth}$${node.position}`}>
               <DataBlock dataBlock={node} i={i} />
             </div>
           ))}
