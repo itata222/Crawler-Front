@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { getCrawlingStatus, runCrawler } from "../services/crawlerService";
-import DataBlock from "./DataBlock";
+import { containerStyles, list_to_tree, renderForeignObjectNode, useCenteredTree } from "../utils/treeCreation";
+import Tree from "react-d3-tree";
 import SummeryLine from "./SummeryLine";
 
 const Home = () => {
-  const [tree, setTree] = useState([]);
+  const [tree, setTree] = useState(null);
+  const [depthResult, setdepthResult] = useState(0);
   const [rootUrl, setRootUrl] = useState("");
   const [maxDepth, setMaxDepth] = useState("");
   const [maxTotalPages, setMaxTotalPages] = useState("");
   const [QueueUrl, setQueueUrl] = useState("");
   const [workID, setWorkID] = useState(null);
-
-  // const [currentDepth, setCurrentDepth] = useState('');
-  // const [currentChildrens, setCurrentChildrens] = useState('');
   const [crawlerRunning, setCrawlerRunning] = useState(false);
+
+  const [translate, containerRef] = useCenteredTree();
+  const nodeSize = { x: 200, y: 200 };
+  const foreignObjectProps = { width: nodeSize.x, height: nodeSize.y, x: 1 };
 
   const submitForm = (e) => {
     e.preventDefault();
@@ -39,15 +42,20 @@ const Home = () => {
             console.log("checking", res);
             if (!!res?.tree) {
               clearInterval(intervalID);
-              for (let i = 0; i < res.tree.length; i++) res.tree[i] = JSON.parse(res.tree[i]);
+              let highest = 0;
+              for (let i = 0; i < res.tree.length; i++) {
+                res.tree[i] = JSON.parse(res.tree[i]);
+                if (res.tree[i].depth > highest) highest = res.tree[i].depth;
+              }
               const sortedTree = res.tree.sort(function (a, b) {
                 return a.position - b.position;
               });
-              console.log(sortedTree);
-              setTree(sortedTree);
+
+              const treeStructure = list_to_tree(sortedTree);
+              console.log(treeStructure[0], "treeStructure");
+              setdepthResult(highest);
+              setTree(treeStructure[0]);
               setCrawlerRunning(false);
-              // setCurrentDepth(res.currentDepth||1)
-              // setCurrentChildrens(res.currentChildrens||20)
             }
           })
           .catch((e) => console.log(e));
@@ -80,14 +88,18 @@ const Home = () => {
         />
         <button disabled={crawlerRunning}>Run Worker !</button>
       </form>
-      {tree.length > 0 && (
+      {tree != null && (
         <>
-          <SummeryLine rootUrl={rootUrl} depth={tree[tree.length - 1].depth} childrens={tree.length} />
-          {tree.map((node, i) => (
-            <div key={`${node.workID}$${node.depth}$${node.position}`}>
-              <DataBlock dataBlock={node} i={i} />
-            </div>
-          ))}
+          <SummeryLine rootUrl={rootUrl} depth={depthResult} childrens={tree.children.length + 1} />
+          <div style={containerStyles} ref={containerRef}>
+            <Tree
+              data={tree}
+              translate={translate}
+              renderCustomNodeElement={(rd3tProps) => renderForeignObjectNode({ ...rd3tProps, foreignObjectProps })}
+              orientation='vertical'
+              nodeSize={nodeSize}
+            />
+          </div>
         </>
       )}
     </div>

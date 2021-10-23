@@ -85,3 +85,30 @@
   background-color: #000000;
   margin: 0.5rem auto;
 }
+.node__root > circle {
+  fill: brown;
+  stroke: brown;
+}
+
+.node__branch > circle {
+  fill: rgb(255, 140, 0);
+  stroke: rgb(255, 140, 0);
+}
+
+.rd3t-link {
+  // fill: green;
+  stroke: green;
+}
+// #treeWrapper {
+//   .rd3t-tree-container .rd3t-grabbable {
+//     .rd3t-svg,
+//     .rd3t-svg-a9227dab-87fd-4df3-9206-d2b9b1dbec7b {
+//       height: 55rem !important;
+//       width: 30rem;
+//       top: -0.5rem;
+//       transform: rotate(90deg);
+//       position: absolute;
+//       left: 17.3rem;
+//     }
+//   }
+// }
