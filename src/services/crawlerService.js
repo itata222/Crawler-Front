@@ -11,9 +11,12 @@ export const runCrawler = async (parameters) => {
   }
 };
 
-export const getCrawlingStatus = async (QueueUrl, workID) => {
+export const getCrawlingStatus = async (QueueUrl, workID, maxDepth, maxTotalPages) => {
   try {
-    const res = await Axios.get(developmentDB + `/get-crawling-status?QueueUrl=${QueueUrl}&workID=${workID}`);
+    const res = await Axios.get(
+      developmentDB +
+        `/get-crawling-status?QueueUrl=${QueueUrl}&workID=${workID}&maxDepth=${parseInt(maxDepth)}&maxTotalPages=${parseInt(maxTotalPages)}`
+    );
     return res.data;
   } catch (err) {
     return err.response.data.message;

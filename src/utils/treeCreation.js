@@ -12,7 +12,7 @@ export const list_to_tree = (list) => {
 
   for (i = 0; i < list.length; i += 1) {
     node = list[i];
-    if (node.parentAddress != null) {
+    if (node.parentAddress != null && list[map[node.parentAddress]] != undefined) {
       // if you have dangling branches check that map[node.parentId] exists
       list[map[node.parentAddress]].children.push(node);
     } else {
@@ -27,7 +27,7 @@ export const useCenteredTree = (defaultTranslate = { x: 0, y: 0 }) => {
   const containerRef = useCallback((containerElem) => {
     if (containerElem !== null) {
       const { width, height } = containerElem.getBoundingClientRect();
-      setTranslate({ x: width / 2, y: height / 2 });
+      setTranslate({ x: width / 2, y: height / 5 });
     }
   }, []);
   return [translate, containerRef];
@@ -52,6 +52,6 @@ export const renderForeignObjectNode = ({ nodeDatum, toggleNode, foreignObjectPr
 
 export const containerStyles = {
   // width: "100vw",
-  height: "100vh",
+  height: "65vh",
   border: "1px solid black",
 };
