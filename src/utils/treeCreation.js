@@ -12,7 +12,7 @@ export const list_to_tree = (list) => {
 
   for (i = 0; i < list.length; i += 1) {
     node = list[i];
-    if (node.parentAddress != null && list[map[node.parentAddress]] != undefined) {
+    if (node.parentAddress != null && list[map[node.parentAddress]] != null) {
       // if you have dangling branches check that map[node.parentId] exists
       list[map[node.parentAddress]].children.push(node);
     } else {
@@ -52,6 +52,6 @@ export const renderForeignObjectNode = ({ nodeDatum, toggleNode, foreignObjectPr
 
 export const containerStyles = {
   // width: "100vw",
-  height: "65vh",
+  height: "55vh",
   border: "1px solid black",
 };

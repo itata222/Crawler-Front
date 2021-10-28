@@ -46,27 +46,41 @@ const Home = () => {
               clearInterval(intervalID);
               setCrawlerRunning(false);
             }
-            let highest = 0,
-              total = 0;
-            for (let i = 0; i < res.tree.length; i++) {
-              res.tree[i] = JSON.parse(res.tree[i]);
-              total++;
-              if (res.tree[i].depth > highest) highest = res.tree[i].depth;
-            }
-            const sortedTree = res.tree.sort(function (a, b) {
-              return a.position - b.position;
+            let deepest = 0,
+              total = 0,
+              finalTree = new Set(),
+              sortedTree = [];
+
+            sortedTree = res.tree.sort(function (a, b) {
+              if (typeof a.position !== "number") a.position = `${a.position}`;
+              if (typeof b.position !== "number") b.position = `${b.position}`;
+              const aPos = a.position.split("-");
+              const bPos = b.position.split("-");
+              for (let i = 0; i < aPos.length; i++) {
+                if (aPos.length < bPos.length) return -1;
+                if (aPos.length > bPos.length) return 1;
+                if (parseInt(aPos[i]) < parseInt(bPos[i])) return -1;
+                if (parseInt(aPos[i]) > parseInt(bPos[i])) return 1;
+                continue;
+              }
+              return 0;
             });
-            console.log(sortedTree);
-            const treeStructure = list_to_tree(sortedTree);
+
+            for (let i = 0; i < Math.min(sortedTree.length, parseInt(maxTotalPages)); i++) {
+              total++;
+              finalTree.add(sortedTree[i]);
+              if (sortedTree[i]?.depth > deepest) deepest = sortedTree[i].depth;
+            }
+            const treeStructure = list_to_tree(Array.from(finalTree));
             console.log(treeStructure[0], "treeStructure");
-            setdepthResult(highest);
+            setdepthResult(deepest);
             setTotalPagesResult(total);
             setTree(treeStructure[0]);
           })
           .catch((e) => console.log(e));
-      }, 5000);
+      }, 3000);
     }
-  }, [crawlerRunning, QueueUrl, maxTotalPages, workID]);
+  }, [crawlerRunning, QueueUrl, workID, maxDepth, maxTotalPages]);
 
   return (
     <>
