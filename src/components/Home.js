@@ -51,20 +51,7 @@ const Home = () => {
               finalTree = new Set(),
               sortedTree = [];
 
-            sortedTree = res.tree.sort(function (a, b) {
-              if (typeof a.position !== "number") a.position = `${a.position}`;
-              if (typeof b.position !== "number") b.position = `${b.position}`;
-              const aPos = a.position.split("-");
-              const bPos = b.position.split("-");
-              for (let i = 0; i < aPos.length; i++) {
-                if (aPos.length < bPos.length) return -1;
-                if (aPos.length > bPos.length) return 1;
-                if (parseInt(aPos[i]) < parseInt(bPos[i])) return -1;
-                if (parseInt(aPos[i]) > parseInt(bPos[i])) return 1;
-                continue;
-              }
-              return 0;
-            });
+            sortedTree = res.tree;
 
             for (let i = 0; i < Math.min(sortedTree.length, parseInt(maxTotalPages)); i++) {
               total++;
